@@ -16,11 +16,7 @@ public:
 
     void keyPress(unsigned char key, const physx::PxTransform& camera) override;
 
-    //void cleanup() override;
-
 private:
-//    physx::PxTransform m_transform;
-//    RenderItem* m_renderItem{ nullptr };
     Vector3D u = Vector3D(3, 1, 0);
 	Vector3D v = Vector3D(0, 4, 0);
 	Vector3D w = Vector3D();
