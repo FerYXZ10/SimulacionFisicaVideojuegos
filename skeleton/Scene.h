@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "PxPhysicsAPI.h"
+#include "RenderUtils.hpp"
 
 // Clase base para las distintas escenas de la aplicación.
 // Provee la interfaz mínima que debe implementar cualquier escena:
@@ -16,7 +18,7 @@ public:
     virtual void init() = 0;
 
     // Libera los recursos asignados en init().
-    virtual void cleanup() = 0;
+    virtual void cleanup();
 
     // Actualiza la lógica de la escena.
     // dt: tiempo en segundos transcurrido desde la última actualización.
@@ -34,4 +36,6 @@ public:
 protected:
     // Nombre de la escena (útil para identificarla en menús o logs).
     std::string m_name;
+    std::vector<RenderItem*> m_renderItems;
+    std::vector<physx::PxTransform> m_transforms;
 };

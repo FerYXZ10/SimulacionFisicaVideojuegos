@@ -267,7 +267,9 @@
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
@@ -277,7 +279,9 @@
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene0.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
