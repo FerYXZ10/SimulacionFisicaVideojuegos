@@ -6,7 +6,7 @@
 class Particle
 {
 public:
-	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc);
+	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping);
 	~Particle();
 
 	void integrateEuler(double t);
@@ -14,6 +14,7 @@ public:
 private:
 	Vector3D vel;
 	Vector3D acc;
+	float damping;
 	physx::PxTransform pos;
 	RenderItem* renderItem;
 
