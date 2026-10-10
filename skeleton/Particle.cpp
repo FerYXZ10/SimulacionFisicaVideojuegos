@@ -1,6 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3D Pos, Vector3D Vel) : pos(Pos.x, Pos.y, Pos.z), vel(Vel) {
+Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc) : pos(Pos.x, Pos.y, Pos.z), vel(Vel), acc(Acc) {
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(1.0f)), &pos, Vector4(0.0f, 1.0f, 1.0f, 1.0f));
 }
 
@@ -10,6 +10,7 @@ Particle::~Particle() {
 
 void Particle::integrateEuler(double t) {
 	pos.p += vel * t;
+	vel += acc * t;
 }
 
 void Particle::liberar() {

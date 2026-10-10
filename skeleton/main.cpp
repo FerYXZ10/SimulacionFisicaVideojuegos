@@ -102,7 +102,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	particle = new Particle(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(10.0f, 0.0f, 0.0f));
+	particle = new Particle(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(10.0f, 0.0f, 0.0f), Vector3D(0.0f, -2.0f, 0.0f));
 
 	// Registrar las prácticas/escenas del curso
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
