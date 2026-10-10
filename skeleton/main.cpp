@@ -27,10 +27,14 @@
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
 
+#include "Particle.h"
+
 #define PVD_HOST "127.0.0.1" // IP localhost for PVD connection
 
 
 std::string display_text = "This is a test";
+
+Particle* particle = nullptr;
 
 
 using namespace physx;
@@ -97,6 +101,9 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	particle = new Particle(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(10.0f, 0.0f, 0.0f));
+
 	// Registrar las prácticas/escenas del curso
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
 	SceneManager::instance().registerScene<Scene0>("Escena0");
@@ -125,6 +132,10 @@ void stepPhysics(bool interactive, double t)
 		// simulate() arranca la simulación de forma asíncrona en el hilo de físicas
 		gScene->simulate(static_cast<PxReal>(gFixedTimestep));
 
+		if (particle) {
+			particle->integrateEuler(gFixedTimestep);
+		}
+
 		// fetchResults(true) bloquea el hilo de renderizado hasta que la física termine.
 		// En prácticas avanzadas es vital para que el renderizado no lea datos corruptos.
 		gScene->fetchResults(true);
@@ -140,6 +151,13 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
+
+	if (particle) {
+		delete particle;
+		particle = nullptr;
+	}
+
+	SceneManager::instance().shutdown();
 	 
 	// Clean scene and dispatcher first to avoid memory leaks
 	if (gScene) {

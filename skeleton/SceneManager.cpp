@@ -31,6 +31,16 @@ void SceneManager::applyPendingSceneChange() {
     m_pendingSceneName.clear();
 }
 
+void SceneManager::shutdown() {
+    if (m_currentScene) {
+        m_currentScene->cleanup();
+        m_currentScene.reset();
+    }
+    m_factories.clear();
+    m_hasPendingChange = false;
+    m_pendingSceneName.clear();
+}
+
 // Llamada por frame: aplica el cambio pendiente antes de actualizar la escena
 // para evitar modificar la escena mientras está siendo usada.
 void SceneManager::update(double dt) {

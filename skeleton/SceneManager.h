@@ -13,8 +13,8 @@ class SceneManager {
 public:
     // Acceso a la instancia única.
     static SceneManager& instance() {
-        static SceneManager inst;
-        return inst;
+        static SceneManager* inst = new SceneManager();
+        return *inst;
     }
 
     // Registra una escena concreta T con un identificador de nombre.
@@ -38,6 +38,8 @@ public:
 
     // Devuelve un puntero a la escena actual (no toma propiedad).
     [[nodiscard]] Scene* getCurrentScene() const { return m_currentScene.get(); }
+
+    void shutdown();
 
 private:
     SceneManager() = default;
