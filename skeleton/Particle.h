@@ -10,12 +10,16 @@ public:
 	~Particle();
 
 	void integrateEuler(double t);
+	void integrateSemiImplicitEuler(double t);
+	void integrateVerlet(double t);
 
 private:
 	Vector3D vel;
 	Vector3D acc;
 	float damping;
+	physx::PxTransform prevPos;
 	physx::PxTransform pos;
+	bool isFirstIntegration = true;
 	RenderItem* renderItem;
 
 	void liberar();

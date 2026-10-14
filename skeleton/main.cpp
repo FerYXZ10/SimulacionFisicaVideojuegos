@@ -133,7 +133,7 @@ void stepPhysics(bool interactive, double t)
 		gScene->simulate(static_cast<PxReal>(gFixedTimestep));
 
 		if (particle) {
-			particle->integrateEuler(gFixedTimestep);
+			particle->integrateVerlet(gFixedTimestep);
 		}
 
 		// fetchResults(true) bloquea el hilo de renderizado hasta que la física termine.
