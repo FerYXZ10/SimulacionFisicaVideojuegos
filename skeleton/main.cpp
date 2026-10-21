@@ -27,14 +27,14 @@
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
 
-#include "Particle.h"
+#include "Projectile.h"
 
 #define PVD_HOST "127.0.0.1" // IP localhost for PVD connection
 
 
 std::string display_text = "This is a test";
 
-Particle* particle = nullptr;
+Projectile* projectile = nullptr;
 
 
 using namespace physx;
@@ -102,7 +102,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	particle = new Particle(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(10.0f, 0.0f, 0.0f), Vector3D(0.0f, -2.0f, 0.0f), 0.98f);
+	projectile = new Projectile(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(300.0f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f), 1.0f, 15.0f, 0.008f, 9.81f);
 
 	// Registrar las prácticas/escenas del curso
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
@@ -132,8 +132,8 @@ void stepPhysics(bool interactive, double t)
 		// simulate() arranca la simulación de forma asíncrona en el hilo de físicas
 		gScene->simulate(static_cast<PxReal>(gFixedTimestep));
 
-		if (particle) {
-			particle->integrateVerlet(gFixedTimestep);
+		if (projectile) {
+			projectile->integrateVerlet(gFixedTimestep);
 		}
 
 		// fetchResults(true) bloquea el hilo de renderizado hasta que la física termine.
@@ -152,9 +152,9 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
-	if (particle) {
-		delete particle;
-		particle = nullptr;
+	if (projectile) {
+		delete projectile;
+		projectile = nullptr;
 	}
 
 	SceneManager::instance().shutdown();
@@ -205,6 +205,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	PX_UNUSED(camera);
 
 	SceneManager::instance().keyPress(key, camera);
+
+	switch (key) {
+		case 'u':
+			projectile->setRealVel(15.0f);
+			break;
+		default:
+			break;
+	}
 }
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)

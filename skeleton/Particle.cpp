@@ -27,6 +27,7 @@ void Particle::integrateVerlet(double t) {
 	else {
 		Vector3D vel_implicit = (pos.p - prevPos.p) / static_cast<float>(t);
 		vel_implicit *= static_cast<float>(pow(damping, t));
+		vel = vel_implicit + acc * t;
 		const Vector3D newPos = pos.p + vel_implicit * t + acc * t * t;
 		prevPos = pos;
 		pos.p = newPos;
