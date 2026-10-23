@@ -23,18 +23,19 @@
 #include "SceneManager.h"
 #include "EmptyScene.h"
 #include "Scene0.h"
+#include "Scene1.h"
 
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
 
-#include "Projectile.h"
+//#include "Projectile.h"
 
 #define PVD_HOST "127.0.0.1" // IP localhost for PVD connection
 
 
 std::string display_text = "This is a test";
 
-Projectile* projectile = nullptr;
+//Projectile* projectile = nullptr;
 
 
 using namespace physx;
@@ -102,11 +103,12 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	projectile = new Projectile(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(300.0f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f), 1.0f, 15.0f, 0.008f, 9.81f);
+	//projectile = new Projectile(Vector3D(0.0f, 10.0f, 0.0f), Vector3D(300.0f, 0.0f, 0.0f), 1.0f, 15.0f, 0.008f, 9.81f);
 
 	// Registrar las prácticas/escenas del curso
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
 	SceneManager::instance().registerScene<Scene0>("Escena0");
+	SceneManager::instance().registerScene<Scene1>("Escena1");
 	
 	// Cargar la escena inicial
 	SceneManager::instance().changeScene("EscenaVacia");
@@ -132,9 +134,9 @@ void stepPhysics(bool interactive, double t)
 		// simulate() arranca la simulación de forma asíncrona en el hilo de físicas
 		gScene->simulate(static_cast<PxReal>(gFixedTimestep));
 
-		if (projectile) {
+		/*if (projectile) {
 			projectile->integrateVerlet(gFixedTimestep);
-		}
+		}*/
 
 		// fetchResults(true) bloquea el hilo de renderizado hasta que la física termine.
 		// En prácticas avanzadas es vital para que el renderizado no lea datos corruptos.
@@ -152,10 +154,10 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
-	if (projectile) {
+	/*if (projectile) {
 		delete projectile;
 		projectile = nullptr;
-	}
+	}*/
 
 	SceneManager::instance().shutdown();
 	 
@@ -206,13 +208,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	SceneManager::instance().keyPress(key, camera);
 
-	switch (key) {
+	/*switch (key) {
 		case 'u':
 			projectile->setRealVel(15.0f);
 			break;
 		default:
 			break;
-	}
+	}*/
 }
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)

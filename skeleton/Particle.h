@@ -6,6 +6,7 @@
 class Particle
 {
 public:
+	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, const physx::PxGeometry& Geo, Vector4 Color);
 	Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping);
 	~Particle();
 

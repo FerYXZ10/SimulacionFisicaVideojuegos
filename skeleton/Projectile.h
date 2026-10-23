@@ -3,7 +3,17 @@
 class Projectile : public Particle
 {
 public:
-	Projectile(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, float SimulatedVel, float RealMass, float RealGravity);
+	struct Config {
+		float realVel;
+		float damping;
+		Vector4 color;
+		float simVel;
+		float realMass;
+		float realGravity;
+	};
+
+	Projectile(Vector3D Pos, Vector3D Vel, float Damping, const physx::PxGeometry& Geo, Vector4 Color, float SimulatedVel, float RealMass, float RealGravity);
+	Projectile(Vector3D Pos, Vector3D Vel, float Damping, float SimulatedVel, float RealMass, float RealGravity);
 	~Projectile() = default;
 
 	void setRealVel(float speed);

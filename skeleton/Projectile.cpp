@@ -1,6 +1,6 @@
 #include "Projectile.h"
 
-Projectile::Projectile(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, float SimulatedVel, float RealMass, float RealGravity) : Particle(Pos, Vel, Acc, Damping), simulatedVel(SimulatedVel), realMass(RealMass), realGravity(RealGravity) {
+Projectile::Projectile(Vector3D Pos, Vector3D Vel, float Damping, const physx::PxGeometry& Geo, Vector4 Color, float SimulatedVel, float RealMass, float RealGravity) : Particle(Pos, Vel, Vector3D(0.0f, 0.0f, 0.0f), Damping, Geo, Color), simulatedVel(SimulatedVel), realMass(RealMass), realGravity(RealGravity) {
 	realVel = Vel.magnitude();
 	simulatedMass = realMass * pow(realVel / simulatedVel, 2.0f);
 	simulatedGravity = realGravity * pow(simulatedVel / realVel, 2.0f);
@@ -8,6 +8,10 @@ Projectile::Projectile(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, 
 	dir.normalize();
 	vel = dir * simulatedVel;
 	acc = Vector3D(0.0f, -simulatedGravity, 0.0f);
+}
+
+Projectile::Projectile(Vector3D Pos, Vector3D Vel, float Damping, float SimulatedVel, float RealMass, float RealGravity) : Projectile(Pos, Vel, Damping, physx::PxSphereGeometry(1.0f), Vector4(0.0f, 1.0f, 1.0f, 1.0f), SimulatedVel, RealMass, RealGravity) {
+	
 }
 
 void Projectile::setRealVel(float speed) {

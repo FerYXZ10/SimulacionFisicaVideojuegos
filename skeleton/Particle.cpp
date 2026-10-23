@@ -1,7 +1,11 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping) : pos(Pos.x, Pos.y, Pos.z), vel(Vel), acc(Acc), damping(Damping) {
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(1.0f)), &pos, Vector4(0.0f, 1.0f, 1.0f, 1.0f));
+Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, const physx::PxGeometry& Geo, Vector4 Color) : pos(Pos.x, Pos.y, Pos.z), vel(Vel), acc(Acc), damping(Damping) {
+	renderItem = new RenderItem(CreateShape(Geo), &pos, Color);
+}
+
+Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping) : Particle(Pos, Vel, Acc, Damping, physx::PxSphereGeometry(1.0f), Vector4(0.0f, 1.0f, 1.0f, 1.0f)) {
+	
 }
 
 Particle::~Particle() {

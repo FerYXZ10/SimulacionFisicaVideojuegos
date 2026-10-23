@@ -60,6 +60,7 @@ void SceneManager::keyPress(unsigned char key, const physx::PxTransform& cameraT
     switch (key) {
 	    case 'V': changeScene("EscenaVacia"); return;
         case '0': changeScene("Escena0"); return;
+		case '1': changeScene("Escena1"); return;
         default:
             // Si no es una tecla de navegación global, se la pasamos a la escena activa
             if (m_currentScene != nullptr) {
