@@ -1,11 +1,7 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, const physx::PxGeometry& Geo, Vector4 Color) : pos(Pos.x, Pos.y, Pos.z), vel(Vel), acc(Acc), damping(Damping) {
+Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping, const physx::PxGeometry& Geo, Vector4 Color, double LifeTime) : pos(Pos.x, Pos.y, Pos.z), vel(Vel), acc(Acc), damping(Damping), maxLifeTime(LifeTime) {
 	renderItem = new RenderItem(CreateShape(Geo), &pos, Color);
-}
-
-Particle::Particle(Vector3D Pos, Vector3D Vel, Vector3D Acc, float Damping) : Particle(Pos, Vel, Acc, Damping, physx::PxSphereGeometry(1.0f), Vector4(0.0f, 1.0f, 1.0f, 1.0f)) {
-	
 }
 
 Particle::~Particle() {
@@ -36,6 +32,24 @@ void Particle::integrateVerlet(double t) {
 		prevPos = pos;
 		pos.p = newPos;
 	}
+}
+
+void Particle::addTime(double t) noexcept {
+	if (maxLifeTime > 0.0) {
+		aliveTime += t;
+	}
+}
+
+bool Particle::isAlive() const noexcept {
+	return maxLifeTime <= 0.0 || aliveTime < maxLifeTime;
+}
+
+Vector3D Particle::getPosition() const {
+	return pos.p;
+}
+
+Vector3D Particle::getVel() const noexcept {
+	return vel;
 }
 
 void Particle::liberar() {
