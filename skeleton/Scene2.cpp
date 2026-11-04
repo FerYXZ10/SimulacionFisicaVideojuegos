@@ -57,6 +57,19 @@ void Scene2::update(double dt) {
     for (auto& system : m_systems) {
         system->update(dt);
     }
+
+    for (auto it = m_fireworks.begin(); it != m_fireworks.end();) {
+        Firework* fw = *it;
+        fw->update(dt);
+
+        if (fw->isFinished()) {
+            delete fw;
+            it = m_fireworks.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 }
 
 void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
@@ -82,6 +95,54 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
             }
             break;
 
+        case 'r':
+        case 'R': {
+            const ParticleSystem::Config expConfig = {
+                Vector3D(0, 0, 0),
+                30000.0f,
+                1.0f,
+                2.0f,
+                Vector3D(0, 0, 0),
+                30.0f, 30.0f,
+                5.0,
+                0.5f,
+                Vector4(1.0f, 0.5f, 0.0f, 1.0f),
+                Vector3D(0.0f, -9.81f, 0.0f),
+                0.95f,
+                200.0f * 200.0f
+            };
+
+            const Firework::Config fwConfig = {
+                Vector3D(0.0f, 0.0f, 0.0f),
+                1.0f,
+                5.5f,
+                Vector3D(0.0f, 50.0f, 0.0f),
+                20.0f,
+                62.5f,
+                1.0f,
+				Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+				Vector3D(0.0f, -9.81f, 0.0f),
+                1.0f,
+                std::vector<Vector4>{
+                    Vector4(1.0f, 0.0f, 0.0f, 1.0f),
+                    Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+                    Vector4(0.0f, 0.0f, 1.0f, 1.0f),
+                    Vector4(1.0f, 1.0f, 0.0f, 1.0f),
+                    Vector4(1.0f, 0.0f, 1.0f, 1.0f),
+                    Vector4(0.0f, 1.0f, 1.0f, 1.0f),
+                    Vector4(1.0f, 0.5f, 0.0f, 1.0f),
+                    Vector4(1.0f, 0.0f, 0.5f, 1.0f),
+                    Vector4(0.5f, 1.0f, 0.0f, 1.0f),
+                    Vector4(0.5f, 0.0f, 1.0f, 1.0f),
+                    Vector4(0.0f, 1.0f, 0.5f, 1.0f),
+                    Vector4(0.0f, 0.5f, 1.0f, 1.0f)
+                }
+			};
+
+            m_fireworks.push_back(new Firework(fwConfig, expConfig));
+            break;
+        }
+
         default:
             break;
     }
@@ -92,5 +153,9 @@ void Scene2::cleanup() {
         delete system;
     }
     m_systems.clear();
+    for (auto& fw : m_fireworks) {
+        delete fw;
+    }
+    m_fireworks.clear();
     Scene::cleanup();
 }

@@ -30,19 +30,20 @@ public:
     void setOrigin(const Vector3D& newOrigin) noexcept;
     void setActive(bool active) noexcept;
     bool isActive() const noexcept;
+	size_t getParticleCount() const noexcept;
 	void cleanup() noexcept;
 
 private:
-    bool m_isActive = true;
+    bool active = true;
 
-    Config m_config;
-    std::vector<Particle*> m_particles;
+    Config config;
+    std::vector<Particle*> particles;
 
-    std::mt19937 m_rng;
-    std::normal_distribution<float> m_velDistribution;
-    std::normal_distribution<float> m_posDistribution;
+    std::mt19937 rng;
+    std::normal_distribution<float> velDistribution;
+    std::normal_distribution<float> posDistribution;
 
-    double m_spawnAccumulator = 0.0;
+    double spawnAccumulator = 0.0;
 
     void generateParticle();
 };
