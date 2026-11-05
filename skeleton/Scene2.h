@@ -3,6 +3,7 @@
 #include "ParticleSystem.h"
 #include "Firework.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
 class Scene2 : public Scene
 {
 private:
