@@ -3,7 +3,11 @@
 void Scene2::init() {
 	GravityForceGenerator* fountainGravity = new GravityForceGenerator(Vector3D(0.0f, -9.81f, 0.0f));
 	GravityForceGenerator* fireGravity = new GravityForceGenerator(Vector3D(0.0f, 2.0f, 0.0f));
-	WindForceGenerator* windForce = new WindForceGenerator(Vector3D(5.0f, 0.0f, 0.0f), 0.1f, 0.0f);
+
+    const Vector3D windCenter = Vector3D(0.0f, 5.0f, -5.0f);
+    constexpr float windRadius = 60.0f;
+    WindForceGenerator* fogWind = new WindForceGenerator(Vector3D(5, 0, 0), 0.1f, 0.0f, windCenter, windRadius);
+    WindForceGenerator* fireWind = new WindForceGenerator(Vector3D(5, 0, 0), 0.1f, 0.0f, windCenter, windRadius);
 
     const ParticleSystem::Config fountainConfig = {
         Vector3D(0, 0, 0),
@@ -40,7 +44,7 @@ void Scene2::init() {
         55.0f * 55.0f
     };
 	ParticleSystem* fogSystem = new ParticleSystem(fogConfig);
-	fogSystem->addForceGenerator(windForce);
+	fogSystem->addForceGenerator(fogWind);
     systems.push_back(fogSystem);
 
     const ParticleSystem::Config fireConfig = {
@@ -51,7 +55,7 @@ void Scene2::init() {
         Vector3D(0.0f, 5.0f, 0.0f),
         3.0f,
         13.0f,
-        1.0,
+        3.0,
         0.4f,
         Vector4(1.0f, 0.3f, 0.0f, 1.0f),
         1.0f,
@@ -60,6 +64,7 @@ void Scene2::init() {
     };
 	ParticleSystem* fireSystem = new ParticleSystem(fireConfig);
 	fireSystem->addForceGenerator(fireGravity);
+	fireSystem->addForceGenerator(fireWind);
     systems.push_back(fireSystem);
 }
 
