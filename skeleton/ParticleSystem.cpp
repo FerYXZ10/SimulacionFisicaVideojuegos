@@ -12,6 +12,12 @@ void ParticleSystem::update(double dt) {
 	for (auto it = particles.begin(); it != particles.end();) {
 		Particle* p = *it;
 
+		p->clearForces();
+
+		for (auto& fg : forceGenerators) {
+			fg->updateForce(p, dt);
+		}
+
 		p->integrateVerlet(dt);
 		p->addTime(dt);
 
@@ -59,11 +65,20 @@ size_t ParticleSystem::getParticleCount() const noexcept {
 	return particles.size();
 }
 
+void ParticleSystem::addForceGenerator(ForceGenerator* fg) {
+	forceGenerators.push_back(fg);
+}
+
 void ParticleSystem::cleanup() noexcept {
 	for (auto& particle : particles) {
 		delete particle;
 	}
 	particles.clear();
+
+	for (auto& fg : forceGenerators) {
+		delete fg;
+	}
+	forceGenerators.clear();
 }
 
 void ParticleSystem::generateParticle() {
@@ -82,5 +97,5 @@ void ParticleSystem::generateParticle() {
 		vel *= config.maxVelMagnitude;
 	}
 
-	particles.push_back(new Particle(pos, vel, config.gravity, config.damping, physx::PxSphereGeometry(config.radius), config.color, config.maxLifetime));
+	particles.push_back(new Particle(pos, vel, config.damping, physx::PxSphereGeometry(config.radius), config.color, config.maxLifetime, config.mass));
 }

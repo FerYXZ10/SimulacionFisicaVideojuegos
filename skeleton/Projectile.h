@@ -17,6 +17,7 @@ public:
 	~Projectile() = default;
 
 	void setRealVel(float speed);
+	float getSimulatedGravity() const noexcept;
 
 private:
 	float realMass;

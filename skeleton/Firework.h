@@ -1,5 +1,6 @@
 #pragma once
 #include "ParticleSystem.h"
+#include "GravityForceGenerator.h"
 #include <utility>
 #include <cmath>
 class Firework
@@ -14,8 +15,8 @@ public:
         float maxVelMagnitude; // Magnitud máxima de la velocidad inicial
         float radius; // Tamaño de la partícula
         Vector4 color; // Color del cohete
-        Vector3D gravity; // Gravedad
         float damping; // Damping
+		float mass; // Masa del cohete
 		std::vector<Vector4> explosionColors; // Paleta de colores de las partículas de la explosión
 	};
 
@@ -25,6 +26,8 @@ public:
     void update(double dt);
     bool isFinished() const;
 
+    void addForceGenerator(ForceGenerator* fg);
+
 private:
     Config config;
     std::mt19937 rng;
@@ -33,5 +36,6 @@ private:
     Particle* rocket;
     ParticleSystem::Config explosionConfig;
     std::vector<std::pair<ParticleSystem*, float>> explosions;
+    std::vector<ForceGenerator*> forceGenerators;
 };
 

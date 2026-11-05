@@ -1,6 +1,9 @@
 #include "Scene2.h"
 
 void Scene2::init() {
+	GravityForceGenerator* fountainGravity = new GravityForceGenerator(Vector3D(0.0f, -9.81f, 0.0f));
+	GravityForceGenerator* fireGravity = new GravityForceGenerator(Vector3D(0.0f, 2.0f, 0.0f));
+
     const ParticleSystem::Config fountainConfig = {
         Vector3D(0, 0, 0),
         100.0f,
@@ -12,11 +15,13 @@ void Scene2::init() {
         3.0,
         0.2f,
         Vector4(0.0f, 0.5f, 1.0f, 1.0f),
-        Vector3D(0.0f, -10.0f, 0.0f),
         1.0f,
+        2.0f,
         40.0f * 40.0f
     };
-    m_systems.push_back(new ParticleSystem(fountainConfig));
+	ParticleSystem* fountainSystem = new ParticleSystem(fountainConfig);
+	fountainSystem->addForceGenerator(fountainGravity);
+    systems.push_back(fountainSystem);
 
     const ParticleSystem::Config fogConfig = {
         Vector3D(0, 10, -10),
@@ -29,11 +34,12 @@ void Scene2::init() {
         3.0,
         0.15f,
         Vector4(0.8f, 0.8f, 0.8f, 0.1f),
-        Vector3D(0.0f, 0.0f, 0.0f),
         0.9f,
+        0.05f,
         50.0f * 50.0f
     };
-    m_systems.push_back(new ParticleSystem(fogConfig));
+	ParticleSystem* fogSystem = new ParticleSystem(fogConfig);
+    systems.push_back(fogSystem);
 
     const ParticleSystem::Config fireConfig = {
         Vector3D(5, 0, -5),
@@ -46,25 +52,27 @@ void Scene2::init() {
         1.0,
         0.4f,
         Vector4(1.0f, 0.3f, 0.0f, 1.0f),
-        Vector3D(0.0f, 2.0f, 0.0f),
         1.0f,
+        0.1f,
         15.0f * 15.0f
     };
-    m_systems.push_back(new ParticleSystem(fireConfig));
+	ParticleSystem* fireSystem = new ParticleSystem(fireConfig);
+	fireSystem->addForceGenerator(fireGravity);
+    systems.push_back(fireSystem);
 }
 
 void Scene2::update(double dt) {
-    for (auto& system : m_systems) {
+    for (auto& system : systems) {
         system->update(dt);
     }
 
-    for (auto it = m_fireworks.begin(); it != m_fireworks.end();) {
+    for (auto it = fireworks.begin(); it != fireworks.end();) {
         Firework* fw = *it;
         fw->update(dt);
 
         if (fw->isFinished()) {
             delete fw;
-            it = m_fireworks.erase(it);
+            it = fireworks.erase(it);
         }
         else {
             ++it;
@@ -76,22 +84,22 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
     switch (key) {
         case 'f':
         case 'F':
-            if (m_systems.size() > 0) {
-                m_systems[0]->setActive(!m_systems[0]->isActive());
+            if (systems.size() > 0) {
+                systems[0]->setActive(!systems[0]->isActive());
             }
             break;
 
         case 'n':
         case 'N':
-            if (m_systems.size() > 1) {
-                m_systems[1]->setActive(!m_systems[1]->isActive());
+            if (systems.size() > 1) {
+                systems[1]->setActive(!systems[1]->isActive());
             }
             break;
 
         case 'g':
         case 'G':
-            if (m_systems.size() > 2) {
-                m_systems[2]->setActive(!m_systems[2]->isActive());
+            if (systems.size() > 2) {
+                systems[2]->setActive(!systems[2]->isActive());
             }
             break;
 
@@ -107,8 +115,8 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
                 5.0,
                 0.5f,
                 Vector4(1.0f, 0.5f, 0.0f, 1.0f),
-                Vector3D(0.0f, -9.81f, 0.0f),
                 0.95f,
+				0.1f,
                 200.0f * 200.0f
             };
 
@@ -121,7 +129,7 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
                 62.5f,
                 1.0f,
 				Vector4(1.0f, 1.0f, 1.0f, 1.0f),
-				Vector3D(0.0f, -9.81f, 0.0f),
+                1.0f,
                 1.0f,
                 std::vector<Vector4>{
                     Vector4(1.0f, 0.0f, 0.0f, 1.0f),
@@ -138,8 +146,12 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
                     Vector4(0.0f, 0.5f, 1.0f, 1.0f)
                 }
 			};
+			Firework* fwSystem = new Firework(fwConfig, expConfig);
+			GravityForceGenerator* fwGravity = new GravityForceGenerator(Vector3D(0.0f, -9.81f, 0.0f));
+			fwSystem->addForceGenerator(fwGravity);
 
-            m_fireworks.push_back(new Firework(fwConfig, expConfig));
+            fireworks.push_back(fwSystem);
+
             break;
         }
 
@@ -149,13 +161,15 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
 }
 
 void Scene2::cleanup() {
-    for (auto& system : m_systems) {
+    for (auto& system : systems) {
         delete system;
     }
-    m_systems.clear();
-    for (auto& fw : m_fireworks) {
+    systems.clear();
+
+    for (auto& fw : fireworks) {
         delete fw;
     }
-    m_fireworks.clear();
+    fireworks.clear();
+
     Scene::cleanup();
 }

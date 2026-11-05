@@ -21,6 +21,8 @@ void Scene1::init() {
 
 void Scene1::update(double dt) {
 	for (auto& projectile : m_projectiles) {
+		projectile->clearForces();
+		projectile->addForce(Vector3D(0.0f, -projectile->getSimulatedGravity() * projectile->getMass(), 0.0f));
 		projectile->integrateVerlet(dt);
 	}
 }

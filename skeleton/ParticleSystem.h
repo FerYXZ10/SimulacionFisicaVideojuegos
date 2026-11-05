@@ -1,5 +1,6 @@
 #pragma once
 #include "Particle.h"
+#include "ForceGenerator.h"
 #include <random>
 class ParticleSystem
 {
@@ -16,8 +17,8 @@ public:
         double maxLifetime; // Tiempo de vida
         float radius; // Tamaño de la partícula
         Vector4 color; // Color
-        Vector3D gravity; // Gravedad
         float damping; // Damping
+		float mass; // Masa
 
         float maxDistanceSq; // Distancia máxima al origen
 	};
@@ -31,6 +32,7 @@ public:
     void setActive(bool active) noexcept;
     bool isActive() const noexcept;
 	size_t getParticleCount() const noexcept;
+    void addForceGenerator(ForceGenerator* fg);
 	void cleanup() noexcept;
 
 private:
@@ -44,6 +46,8 @@ private:
     std::normal_distribution<float> posDistribution;
 
     double spawnAccumulator = 0.0;
+
+    std::vector<ForceGenerator*> forceGenerators;
 
     void generateParticle();
 };

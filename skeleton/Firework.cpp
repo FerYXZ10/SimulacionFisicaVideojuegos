@@ -17,28 +17,41 @@ Firework::Firework(const Config& conf, const ParticleSystem::Config& explConfig)
         vel *= config.maxVelMagnitude;
     }
 
-	const double lifeTime = (config.gravity.y != 0.0f) ? std::abs(vel.y / config.gravity.y) : 5.0f;
+	const double lifeTime = std::abs(vel.y / 9.81f);
 
     rocket = new Particle(
         pos,
         vel,
-        config.gravity,
         config.damping,
         physx::PxSphereGeometry(config.radius),
         config.color,
-        lifeTime
+        lifeTime,
+        config.mass
     );
 }
 
 Firework::~Firework() {
     delete rocket;
+
     for (auto& exp : explosions) {
         delete exp.first;
     }
+    explosions.clear();
+
+    for (auto& fg : forceGenerators) {
+        delete fg;
+	}
+	forceGenerators.clear();
 }
 
 void Firework::update(double dt) {
     if (rocket) {
+        rocket->clearForces();
+
+        for (auto fg : forceGenerators) {
+            fg->updateForce(rocket, dt);
+        }
+
         rocket->integrateVerlet(dt);
         rocket->addTime(dt);
 
@@ -50,12 +63,15 @@ void Firework::update(double dt) {
                 explosionConfig.color = config.explosionColors[colorIndex(rng)];
             }
 
-			explosionConfig.maxLifetime = std::sqrt(std::abs(2.0f * explosionConfig.origin.y / explosionConfig.gravity.y)) + 1.5f;
+			explosionConfig.maxLifetime = std::sqrt(std::abs(2.0f * explosionConfig.origin.y / 9.81f)) + 1.5f;
 
 			const float maxDistance = explosionConfig.origin.y * 1.075f;
 			explosionConfig.maxDistanceSq = maxDistance * maxDistance;
 
-            explosions.push_back({ new ParticleSystem(explosionConfig), 0.05f });
+			ParticleSystem* explosionSystem = new ParticleSystem(explosionConfig);
+            explosionSystem->addForceGenerator(new GravityForceGenerator(Vector3D(0.0f, -9.81f, 0.0f)));
+
+            explosions.push_back({ explosionSystem, 0.05f });
 
             delete rocket;
             rocket = nullptr;
@@ -85,4 +101,8 @@ void Firework::update(double dt) {
 
 bool Firework::isFinished() const {
     return rocket == nullptr && explosions.empty();
+}
+
+void Firework::addForceGenerator(ForceGenerator* fg) {
+    forceGenerators.push_back(fg);
 }

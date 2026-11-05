@@ -2,11 +2,12 @@
 #include "Scene.h"
 #include "ParticleSystem.h"
 #include "Firework.h"
+#include "GravityForceGenerator.h"
 class Scene2 : public Scene
 {
 private:
-    std::vector<ParticleSystem*> m_systems;
-    std::vector<Firework*> m_fireworks;
+    std::vector<ParticleSystem*> systems;
+    std::vector<Firework*> fireworks;
 public:
     explicit Scene2(std::string name) : Scene(std::move(name)) {}
 
