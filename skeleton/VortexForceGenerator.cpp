@@ -8,7 +8,7 @@ Vector3D VortexForceGenerator::computeWindVel(const Vector3D& position) const no
     return Vector3D(-strength * rel.z, strength * (50.0f - rel.y), strength * rel.x);
 }
 
-void VortexForceGenerator::updateForce(Particle* p, double t) {
+void VortexForceGenerator::updateForce(Particle* p) {
     if (p->getMass() <= 0.0f) {
         return;
     }

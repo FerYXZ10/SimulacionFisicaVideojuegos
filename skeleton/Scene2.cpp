@@ -13,6 +13,8 @@ void Scene2::init() {
 	constexpr float vortexRadius = 250.0f;
 	VortexForceGenerator* vortexWind = new VortexForceGenerator(vortexCenter, vortexRadius, 5.0f, 0.1f, 0.0f);
 
+	explosionCenter = Vector3D(-100.0f, 0.0f, 0.0f);
+
     const ParticleSystem::Config fountainConfig = {
         Vector3D(0, 0, 0),
         100.0f,
@@ -93,6 +95,7 @@ void Scene2::init() {
 
 void Scene2::update(double dt) {
     for (auto& system : systems) {
+		system->tick(dt);
         system->update(dt);
     }
 
@@ -106,6 +109,23 @@ void Scene2::update(double dt) {
         }
         else {
             ++it;
+        }
+    }
+
+    if (explosionSystem) {
+		explosionSystem->tick(dt);
+
+        if (explosionGenerator && explosionGenerator->isFinished()) {
+            explosionSystem->setActive(false);
+        }
+
+        explosionSystem->update(dt);
+
+        if (!explosionSystem->isActive() && explosionSystem->getParticleCount() == 0) {
+            ParticleSystem* deadSystem = explosionSystem;
+            explosionSystem = nullptr;
+            explosionGenerator = nullptr;
+            delete deadSystem;
         }
     }
 }
@@ -139,6 +159,38 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
                 systems[3]->setActive(!systems[3]->isActive());
             }
 			break;
+
+		case 'e':
+        case 'E': {
+            if (explosionSystem) {
+                ParticleSystem* deadSystem = explosionSystem;
+                explosionSystem = nullptr;
+                explosionGenerator = nullptr;
+                delete deadSystem;
+            }
+
+            const ParticleSystem::Config explosionConfig = {
+                explosionCenter,
+                5000.0f,
+                30.0f,
+                15.0f,
+                Vector3D(0.0f, 0.0f, 0.0f),
+                100.0f,
+                80.0f,
+                1.2,
+                1.0f,
+                Vector4(1.0f, 0.6f, 0.0f, 1.0f),
+                0.98f,
+                0.3f,
+                500.0f * 500.0f
+            };
+
+            explosionSystem = new ParticleSystem(explosionConfig);
+            explosionGenerator = new ExplosionForceGenerator(explosionCenter, 400.0f, 20000.0f, 0.4f);
+            explosionSystem->addForceGenerator(explosionGenerator);
+
+            break;
+        }
 
         case 'r':
         case 'R': {
@@ -207,6 +259,13 @@ void Scene2::cleanup() {
         delete fw;
     }
     fireworks.clear();
+
+    if (explosionSystem) {
+        ParticleSystem* deadSystem = explosionSystem;
+        explosionSystem = nullptr;
+        explosionGenerator = nullptr;
+        delete deadSystem;
+    }
 
     Scene::cleanup();
 }

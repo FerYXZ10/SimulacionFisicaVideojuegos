@@ -8,6 +8,12 @@ ParticleSystem::~ParticleSystem() {
 	cleanup();
 }
 
+void ParticleSystem::tick(double dt) {
+	for (auto& fg : forceGenerators) {
+		fg->tick(dt);
+	}
+}
+
 void ParticleSystem::update(double dt) {
 	for (auto it = particles.begin(); it != particles.end();) {
 		Particle* p = *it;
@@ -15,7 +21,7 @@ void ParticleSystem::update(double dt) {
 		p->clearForces();
 
 		for (auto& fg : forceGenerators) {
-			fg->updateForce(p, dt);
+			fg->updateForce(p);
 		}
 
 		p->integrateVerlet(dt);
@@ -67,6 +73,14 @@ size_t ParticleSystem::getParticleCount() const noexcept {
 
 void ParticleSystem::addForceGenerator(ForceGenerator* fg) {
 	forceGenerators.push_back(fg);
+}
+
+void ParticleSystem::removeForceGenerator(ForceGenerator* fg) {
+	auto it = std::find(forceGenerators.begin(), forceGenerators.end(), fg);
+	if (it != forceGenerators.end()) {
+		delete *it;
+		forceGenerators.erase(it);
+	}
 }
 
 void ParticleSystem::cleanup() noexcept {

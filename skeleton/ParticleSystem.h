@@ -2,6 +2,7 @@
 #include "Particle.h"
 #include "ForceGenerator.h"
 #include <random>
+#include <algorithm>
 class ParticleSystem
 {
 public:
@@ -26,6 +27,7 @@ public:
 	ParticleSystem(const Config& config);
 	~ParticleSystem();
 
+    void tick(double dt);
 	void update(double dt);
     Vector3D getOrigin() const noexcept;
     void setOrigin(const Vector3D& newOrigin) noexcept;
@@ -33,6 +35,7 @@ public:
     bool isActive() const noexcept;
 	size_t getParticleCount() const noexcept;
     void addForceGenerator(ForceGenerator* fg);
+    void removeForceGenerator(ForceGenerator* fg);
 	void cleanup() noexcept;
 
 private:

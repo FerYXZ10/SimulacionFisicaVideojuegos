@@ -46,10 +46,14 @@ Firework::~Firework() {
 
 void Firework::update(double dt) {
     if (rocket) {
+        for (auto fg : forceGenerators) {
+            fg->tick(dt);
+        }
+
         rocket->clearForces();
 
         for (auto fg : forceGenerators) {
-            fg->updateForce(rocket, dt);
+            fg->updateForce(rocket);
         }
 
         rocket->integrateVerlet(dt);
@@ -82,6 +86,7 @@ void Firework::update(double dt) {
         ParticleSystem* exp = it->first;
         float& timer = it->second;
 
+        exp->tick(dt);
         exp->update(dt);
         timer -= dt;
 
