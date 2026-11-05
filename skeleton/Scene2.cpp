@@ -9,6 +9,10 @@ void Scene2::init() {
     WindForceGenerator* fogWind = new WindForceGenerator(Vector3D(5, 0, 0), 0.1f, 0.0f, windCenter, windRadius);
     WindForceGenerator* fireWind = new WindForceGenerator(Vector3D(5, 0, 0), 0.1f, 0.0f, windCenter, windRadius);
 
+	const Vector3D vortexCenter = Vector3D(100.0f, 5.0f, -5.0f);
+	constexpr float vortexRadius = 250.0f;
+	VortexForceGenerator* vortexWind = new VortexForceGenerator(vortexCenter, vortexRadius, 5.0f, 0.1f, 0.0f);
+
     const ParticleSystem::Config fountainConfig = {
         Vector3D(0, 0, 0),
         100.0f,
@@ -66,6 +70,25 @@ void Scene2::init() {
 	fireSystem->addForceGenerator(fireGravity);
 	fireSystem->addForceGenerator(fireWind);
     systems.push_back(fireSystem);
+
+    const ParticleSystem::Config vortexConfig = {
+        Vector3D(vortexCenter.x, vortexCenter.y - vortexRadius + 50.0f, vortexCenter.z),
+        1250.0f,
+        150.0f,
+        50.0f,
+        Vector3D(0.0f, 0.0f, 0.0f),
+        0.5f,
+        4.0f,
+        7.5,
+        1.5f,
+        Vector4(0.8f, 0.8f, 0.8f, 0.1f),
+        0.95f,
+        0.05f,
+        500.0f * 500.0f
+    };
+    ParticleSystem* vortexSystem = new ParticleSystem(vortexConfig);
+    vortexSystem->addForceGenerator(vortexWind);
+    systems.push_back(vortexSystem);
 }
 
 void Scene2::update(double dt) {
@@ -109,6 +132,13 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
                 systems[2]->setActive(!systems[2]->isActive());
             }
             break;
+
+		case 'x':
+        case 'X':
+            if (systems.size() > 3) {
+                systems[3]->setActive(!systems[3]->isActive());
+            }
+			break;
 
         case 'r':
         case 'R': {
