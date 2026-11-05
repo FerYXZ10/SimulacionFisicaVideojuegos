@@ -47,6 +47,7 @@ private:
     std::mt19937 rng;
     std::normal_distribution<float> velDistribution;
     std::normal_distribution<float> posDistribution;
+    std::uniform_real_distribution<float> lifeTimeDistribution;
 
     double spawnAccumulator = 0.0;
 

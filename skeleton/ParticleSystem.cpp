@@ -1,8 +1,6 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(const Config& conf) : config(conf), rng(std::random_device{}()), velDistribution(0.0f, std::sqrt(config.velVariance)), posDistribution(0.0f, std::sqrt(config.posVariance)) {
-
-}
+ParticleSystem::ParticleSystem(const Config& conf) : config(conf), rng(std::random_device{}()), velDistribution(0.0f, std::sqrt(config.velVariance)), posDistribution(0.0f, std::sqrt(config.posVariance)), lifeTimeDistribution(0.8f, 1.2f) {}
 
 ParticleSystem::~ParticleSystem() {
 	cleanup();
@@ -111,5 +109,7 @@ void ParticleSystem::generateParticle() {
 		vel *= config.maxVelMagnitude;
 	}
 
-	particles.push_back(new Particle(pos, vel, config.damping, physx::PxSphereGeometry(config.radius), config.color, config.maxLifetime, config.mass));
+	double particleLifeTime = config.maxLifetime * lifeTimeDistribution(rng);
+
+	particles.push_back(new Particle(pos, vel, config.damping, physx::PxSphereGeometry(config.radius), config.color, particleLifeTime, config.mass));
 }
