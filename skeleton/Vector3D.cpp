@@ -7,7 +7,7 @@ float Vector3D::magnitude() const noexcept {
 
 Vector3D& Vector3D::normalize() noexcept {
 	const float mag = magnitude();
-	if (mag != 0) {
+	if (mag > 0.0f) {
 		x /= mag;
 		y /= mag;
 		z /= mag;

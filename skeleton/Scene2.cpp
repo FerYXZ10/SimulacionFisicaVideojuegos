@@ -131,6 +131,8 @@ void Scene2::update(double dt) {
 }
 
 void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
+    PX_UNUSED(camera);
+
     switch (key) {
         case 'f':
         case 'F':

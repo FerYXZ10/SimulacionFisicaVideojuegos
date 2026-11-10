@@ -1,6 +1,6 @@
 #include "Firework.h"
 
-Firework::Firework(const Config& conf, const ParticleSystem::Config& explConfig) : config(conf), rng(std::random_device{}()), velDistribution(0.0f, std::sqrt(config.velVariance)), posDistribution(0.0f, std::sqrt(config.posVariance)), explosionConfig(explConfig)
+Firework::Firework(const Config& conf, const ParticleSystem::Config& explConfig) : config(conf), rng(std::random_device{}()), velDistribution(0.0f, std::sqrt(config.velVariance)), posDistribution(0.0f, std::sqrt(config.posVariance)), rocket(nullptr), explosionConfig(explConfig)
 {
 	Vector3D offset(posDistribution(rng), posDistribution(rng), posDistribution(rng));
 
@@ -46,13 +46,13 @@ Firework::~Firework() {
 
 void Firework::update(double dt) {
     if (rocket) {
-        for (auto fg : forceGenerators) {
+        for (auto& fg : forceGenerators) {
             fg->tick(dt);
         }
 
         rocket->clearForces();
 
-        for (auto fg : forceGenerators) {
+        for (auto& fg : forceGenerators) {
             fg->updateForce(rocket);
         }
 
@@ -104,7 +104,7 @@ void Firework::update(double dt) {
     }
 }
 
-bool Firework::isFinished() const {
+bool Firework::isFinished() const noexcept {
     return rocket == nullptr && explosions.empty();
 }
 

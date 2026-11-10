@@ -2,8 +2,10 @@
 
 Projectile::Projectile(Vector3D Pos, Vector3D Vel, float Damping, const physx::PxGeometry& Geo, Vector4 Color, float SimulatedVel, float RealMass, float RealGravity) : Particle(Pos, Vel, Damping, Geo, Color), simulatedVel(SimulatedVel), realMass(RealMass), realGravity(RealGravity) {
 	realVel = Vel.magnitude();
-	simulatedMass = realMass * pow(realVel / simulatedVel, 2.0f);
-	simulatedGravity = realGravity * pow(simulatedVel / realVel, 2.0f);
+	const float simulatedMassRatio = realVel / simulatedVel;
+	const float simulatedGravityRatio = simulatedVel / realVel;
+	simulatedMass = realMass * simulatedMassRatio * simulatedMassRatio;
+	simulatedGravity = realGravity * simulatedGravityRatio * simulatedGravityRatio;
 	Vector3D dir = Vel;
 	dir.normalize();
 	vel = dir * simulatedVel;
@@ -14,10 +16,12 @@ Projectile::Projectile(Vector3D Pos, Vector3D Vel, float Damping, float Simulate
 	
 }
 
-void Projectile::setRealVel(float speed) {
+void Projectile::setRealVel(float speed) noexcept {
 	realVel = speed;
-	simulatedMass = realMass * pow(realVel / simulatedVel, 2.0f);
-	simulatedGravity = realGravity * pow(simulatedVel / realVel, 2.0f);
+	const float simulatedMassRatio = realVel / simulatedVel;
+	const float simulatedGravityRatio = simulatedVel / realVel;
+	simulatedMass = realMass * simulatedMassRatio * simulatedMassRatio;
+	simulatedGravity = realGravity * simulatedGravityRatio * simulatedGravityRatio;
 	Vector3D dir = vel;
 	dir.normalize();
 	vel = dir * simulatedVel;

@@ -2,12 +2,13 @@
 
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
+#include <cmath>
 
 class Particle
 {
 public:
 	Particle(Vector3D Pos, Vector3D Vel, float Damping, const physx::PxGeometry& Geo = physx::PxSphereGeometry(1.0f), Vector4 Color = Vector4(0.0f, 1.0f, 1.0f, 1.0f), double LifeTime = 0.0f, float Mass = 1.0f);
-	~Particle();
+	virtual ~Particle();
 
 	void integrateEuler(double t);
 	void integrateSemiImplicitEuler(double t);
@@ -16,9 +17,10 @@ public:
 	void addTime(double t) noexcept;
 	bool isAlive() const noexcept;
 
-	Vector3D getPosition() const;
+	Vector3D getPosition() const noexcept;
 	Vector3D getVel() const noexcept;
 	float getMass() const noexcept;
+	void setMass(float _mass) noexcept;
 
 	void clearForces() noexcept;
 	void addForce(const Vector3D& f) noexcept;

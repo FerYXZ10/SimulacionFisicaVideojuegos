@@ -16,7 +16,7 @@ public:
 	Projectile(Vector3D Pos, Vector3D Vel, float Damping, float SimulatedVel, float RealMass, float RealGravity);
 	~Projectile() = default;
 
-	void setRealVel(float speed);
+	void setRealVel(float speed) noexcept;
 	float getSimulatedGravity() const noexcept;
 
 private:

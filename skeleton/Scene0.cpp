@@ -8,6 +8,8 @@ void Scene0::init() {
 
     m_renderItems.push_back(new RenderItem(shape, &m_transforms.back(), Vector4(1.0f, 0.0f, 1.0f, 1.0f)));
 
+    shape->release();
+
     // Reto A
 	w = u.cross(v);
 
@@ -29,6 +31,8 @@ void Scene0::init() {
 
 	m_transforms.push_back(physx::PxTransform(w));
 	m_renderItems.push_back(new RenderItem(shapeA, &m_transforms.back(), Vector4(0.0f, 0.0f, 1.0f, 1.0f)));
+
+    shapeA->release();
 
     // Reto B
     Vector3D objetivos[] = {
@@ -57,25 +61,29 @@ void Scene0::init() {
         physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f));
         m_transforms.push_back(physx::PxTransform(P.x, P.y, P.z));
         m_renderItems.push_back(new RenderItem(shape, &m_transforms.back(), color));
+        shape->release();
     }
 
     // Reto C
     for (int i = 0; i < N; ++i) {
-        float t = static_cast<float>(i) / static_cast<float>(N - 1);
+        const float t = static_cast<float>(i) / static_cast<float>(N - 1);
 
-        Vector3D P = A + (B - A) * t;
+        const Vector3D P = A + (B - A) * t;
 
         physx::PxShape* shapeC = CreateShape(physx::PxSphereGeometry(0.3f));
         m_transforms.push_back(physx::PxTransform(P.x, P.y, P.z));
         m_renderItems.push_back(new RenderItem(shapeC, &m_transforms.back(), Vector4(1.0f, 1.0f, 0.0f, 1.0f)));
+        shapeC->release();
     }
 }
 
 void Scene0::update(double dt) {
-    
+    PX_UNUSED(dt);
 }
 
 void Scene0::keyPress(unsigned char key, const physx::PxTransform& camera) {
+    PX_UNUSED(camera);
+
     if (key == 'r' || key == 'R') {
         for (auto& transform : m_transforms) {
             transform.p = physx::PxVec3(0.0f, 0.0f, 0.0f); // Reset

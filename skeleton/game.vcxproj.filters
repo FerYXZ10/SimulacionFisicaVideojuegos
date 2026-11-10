@@ -24,6 +24,9 @@
     <ClCompile Include="WindForceGenerator.cpp" />
     <ClCompile Include="VortexForceGenerator.cpp" />
     <ClCompile Include="ExplosionForceGenerator.cpp" />
+    <ClCompile Include="SpringForceGenerator.cpp" />
+    <ClCompile Include="AnchoredSpringForceGenerator.cpp" />
+    <ClCompile Include="Scene3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -51,6 +54,9 @@
     <ClInclude Include="WindForceGenerator.h" />
     <ClInclude Include="VortexForceGenerator.h" />
     <ClInclude Include="ExplosionForceGenerator.h" />
+    <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="AnchoredSpringForceGenerator.h" />
+    <ClInclude Include="Scene3.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

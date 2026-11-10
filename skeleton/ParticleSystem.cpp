@@ -109,7 +109,7 @@ void ParticleSystem::generateParticle() {
 		vel *= config.maxVelMagnitude;
 	}
 
-	double particleLifeTime = config.maxLifetime * lifeTimeDistribution(rng);
+	const double particleLifeTime = config.maxLifetime * lifeTimeDistribution(rng);
 
 	particles.push_back(new Particle(pos, vel, config.damping, physx::PxSphereGeometry(config.radius), config.color, particleLifeTime, config.mass));
 }

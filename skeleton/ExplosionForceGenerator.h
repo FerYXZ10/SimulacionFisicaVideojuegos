@@ -7,7 +7,7 @@ public:
     ExplosionForceGenerator(const Vector3D& center, float rad, float _k, float tau) noexcept;
     void tick(double dt) noexcept override;
     bool isFinished() const noexcept;
-    void updateForce(Particle* p) override;
+    void updateForce(Particle* p) noexcept override;
 
 private:
 	Vector3D computeExplosionForce(const Vector3D& position, double elapsed) const noexcept;

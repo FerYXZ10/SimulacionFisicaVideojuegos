@@ -24,7 +24,7 @@ bool ExplosionForceGenerator::isFinished() const noexcept {
     return elapsedTime > 4.0f * tau;
 }
 
-void ExplosionForceGenerator::updateForce(Particle* p) {
+void ExplosionForceGenerator::updateForce(Particle* p) noexcept {
     if (p->getMass() <= 0.0f) {
         return;
     }

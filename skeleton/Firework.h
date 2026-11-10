@@ -24,7 +24,7 @@ public:
     ~Firework();
 
     void update(double dt);
-    bool isFinished() const;
+    bool isFinished() const noexcept;
 
     void addForceGenerator(ForceGenerator* fg);
 

@@ -7,16 +7,19 @@ void Scene1::init() {
 	physx::PxShape* floorShape = CreateShape(physx::PxBoxGeometry(50.0f, 1.0f, 50.0f));
 	m_transforms.push_back(physx::PxTransform(physx::PxVec3(0.0f, -1.0f, 0.0f)));
 	m_renderItems.push_back(new RenderItem(floorShape, &m_transforms.back(), Vector4(0.2f, 0.6f, 0.2f, 1.0f)));
+	floorShape->release();
 
 	// Diana
 	physx::PxShape* targetShape = CreateShape(physx::PxBoxGeometry(3.0f, 3.0f, 0.25f));
 	m_transforms.push_back(physx::PxTransform(physx::PxVec3(0.0f, 5.0f, -30.0f)));
 	m_renderItems.push_back(new RenderItem(targetShape, &m_transforms.back(), Vector4(0.9f, 0.1f, 0.1f, 1.0f)));
+	targetShape->release();
 
 	// Centro de la diana
 	physx::PxShape* centerShape = CreateShape(physx::PxSphereGeometry(1.0f));
 	m_transforms.push_back(physx::PxTransform(physx::PxVec3(0.0f, 5.0f, -29.75f)));
 	m_renderItems.push_back(new RenderItem(centerShape, &m_transforms.back(), Vector4(1.0f, 0.8f, 0.0f, 1.0f)));
+	centerShape->release();
 }
 
 void Scene1::update(double dt) {

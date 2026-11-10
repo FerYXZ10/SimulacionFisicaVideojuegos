@@ -17,7 +17,7 @@ public:
 	float dot(const Vector3D& v) const noexcept;
 	Vector3D cross(const Vector3D& v) const noexcept;
 
-	Vector3D operator =(const physx::PxVec3& v) noexcept {
+	Vector3D& operator =(const physx::PxVec3& v) noexcept {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -41,13 +41,13 @@ public:
 	}
 
 	Vector3D operator /(float f) const {
-		if (f == 0) throw std::runtime_error("Division by zero in Vector3D operator /");
+		if (f == 0) throw std::domain_error("Division by zero in Vector3D operator /");
 
 		return Vector3D(x / f, y / f, z / f);
 	}
 
 	Vector3D operator /(const Vector3D& v) const {
-		if (v.x == 0 || v.y == 0 || v.z == 0) throw std::runtime_error("Division by zero in Vector3D operator /");
+		if (v.x == 0 || v.y == 0 || v.z == 0) throw std::domain_error("Division by zero in Vector3D operator /");
 
 		return Vector3D(x / v.x, y / v.y, z / v.z);
 	}
@@ -74,7 +74,7 @@ public:
 	}
 
 	Vector3D operator /=(float f) {
-		if (f == 0) throw std::runtime_error("Division by zero in Vector3D operator /=");
+		if (f == 0) throw std::domain_error("Division by zero in Vector3D operator /=");
 
 		x /= f;
 		y /= f;
