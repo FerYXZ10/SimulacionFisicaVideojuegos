@@ -6,6 +6,8 @@ public:
     WindForceGenerator(const Vector3D& windV, float _k1, float _k2, const Vector3D& center, float radius) noexcept;
     void updateForce(Particle* p) override;
 
+    void setWindVel(const Vector3D& windV) noexcept;
+
 protected:
     Vector3D windVel;
     float k1;

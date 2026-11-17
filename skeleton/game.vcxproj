@@ -263,6 +263,7 @@
   <ItemGroup>
     <ClCompile Include="AnchoredSpringForceGenerator.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="ElasticBandForceGenerator.cpp" />
     <ClCompile Include="ExplosionForceGenerator.cpp" />
     <ClCompile Include="Firework.cpp" />
     <ClCompile Include="GravityForceGenerator.cpp" />
@@ -288,6 +289,7 @@
     <ClInclude Include="AnchoredSpringForceGenerator.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="ElasticBandForceGenerator.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="ExplosionForceGenerator.h" />
     <ClInclude Include="Firework.h" />

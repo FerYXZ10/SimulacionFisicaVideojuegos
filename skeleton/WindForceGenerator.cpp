@@ -19,3 +19,7 @@ void WindForceGenerator::updateForce(Particle* p) {
 	}
 	p->addForce(force);
 }
+
+void WindForceGenerator::setWindVel(const Vector3D& windV) noexcept {
+	windVel = windV;
+}

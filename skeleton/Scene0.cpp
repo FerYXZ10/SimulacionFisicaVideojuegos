@@ -1,6 +1,8 @@
 #include "Scene0.h"
 
 void Scene0::init() {
+    display_text = "Scene 0";
+
     m_transforms.reserve(1+ 3 + 4 + N);
 
     physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f));

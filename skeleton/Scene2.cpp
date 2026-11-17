@@ -1,6 +1,8 @@
 #include "Scene2.h"
 
 void Scene2::init() {
+    display_text = "Scene 2";
+
 	GravityForceGenerator* fountainGravity = new GravityForceGenerator(Vector3D(0.0f, -9.81f, 0.0f));
 	GravityForceGenerator* fireGravity = new GravityForceGenerator(Vector3D(0.0f, 2.0f, 0.0f));
 
@@ -137,28 +139,32 @@ void Scene2::keyPress(unsigned char key, const physx::PxTransform& camera) {
         case 'f':
         case 'F':
             if (systems.size() > 0) {
-                systems[0]->setActive(!systems[0]->isActive());
+                auto* sys0 = systems.at(0);
+                sys0->setActive(!sys0->isActive());
             }
             break;
 
         case 'n':
         case 'N':
             if (systems.size() > 1) {
-                systems[1]->setActive(!systems[1]->isActive());
+                auto* sys1 = systems.at(1);
+                sys1->setActive(!sys1->isActive());
             }
             break;
 
         case 'g':
         case 'G':
             if (systems.size() > 2) {
-                systems[2]->setActive(!systems[2]->isActive());
+                auto* sys2 = systems.at(2);
+                sys2->setActive(!sys2->isActive());
             }
             break;
 
 		case 'x':
         case 'X':
             if (systems.size() > 3) {
-                systems[3]->setActive(!systems[3]->isActive());
+                auto* sys3 = systems.at(3);
+                sys3->setActive(!sys3->isActive());
             }
 			break;
 

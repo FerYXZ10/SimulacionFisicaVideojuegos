@@ -1,6 +1,8 @@
 #include "Scene1.h"
 
 void Scene1::init() {
+	display_text = "Scene 1";
+
 	m_transforms.reserve(3);
 
 	// Suelo
